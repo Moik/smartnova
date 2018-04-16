@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,7 +18,7 @@ import { SignalRService } from '../../../../shared/services/auth/signalr.service
   styleUrls: ['./sells.component.less']
 })
 
-export class SellsComponent implements OnInit, OnDestroy {
+export class SellsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public data: TItemSells[];
   productPk: string;
@@ -86,15 +86,19 @@ export class SellsComponent implements OnInit, OnDestroy {
     }
 
     this.page = this.settingsService.settings.sells.page;
+  }
 
-    this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
-      this.serviceProd.getSell(JSON.parse(<string>resp).TerminalPk).subscribe(product => {
-        this.data = product.TerminalSales;
-        this.totalSum = this.filterPipe.transform(this.data, this.multiFilter).reduce((sum, current) => {
-          return sum + current.SoldSum;
-        }, 0);
-        return product;
-      }, err => console.log(err));
+  ngAfterViewInit() {
+    this.signalRService.signalrConnection$.subscribe(connect => {
+      this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
+        this.serviceProd.getSell(JSON.parse(<string>resp).TerminalPk).subscribe(product => {
+          this.data = product.TerminalSales;
+          this.totalSum = this.filterPipe.transform(this.data, this.multiFilter).reduce((sum, current) => {
+            return sum + current.SoldSum;
+          }, 0);
+          return product;
+        }, err => console.log(err));
+      });
     });
   }
 

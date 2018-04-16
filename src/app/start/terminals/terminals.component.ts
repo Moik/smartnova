@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SHARED_PIPE } from '../../shared/shared';
@@ -18,7 +18,7 @@ import { SignalRService } from '../../shared/services/auth/signalr.service';
   styleUrls: ['./terminals.component.less'],
 })
 
-export class TerminalsComponent implements OnInit, OnDestroy {
+export class TerminalsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public filterQuery = '';
   public rowsOnPage = 10;
@@ -73,19 +73,23 @@ export class TerminalsComponent implements OnInit, OnDestroy {
     }
 
     this.page = this.settingsService.settings.terminals.page;
+  }
 
-    this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
-      this.getTerminalsService.getTerminals().subscribe((data) => {
-        if (data.IsSuccess) {
-          this.data = data.Terminals;
-        }
+  ngAfterViewInit() {
+    this.signalRService.signalrConnection$.subscribe(connect => {
+      this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
+        this.getTerminalsService.getTerminals().subscribe((data) => {
+          if (data.IsSuccess) {
+            this.data = data.Terminals;
+          }
+        });
       });
-    });
-    this.eventSubscription = this.signalRService.onEventSent$.subscribe(resp => {
-      this.getTerminalsService.getTerminals().subscribe((data) => {
-        if (data.IsSuccess) {
-          this.data = data.Terminals;
-        }
+      this.eventSubscription = this.signalRService.onEventSent$.subscribe(resp => {
+        this.getTerminalsService.getTerminals().subscribe((data) => {
+          if (data.IsSuccess) {
+            this.data = data.Terminals;
+          }
+        });
       });
     });
   }

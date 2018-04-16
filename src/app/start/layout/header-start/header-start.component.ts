@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AppComponent } from '../../../app.component';
@@ -16,7 +16,7 @@ import { SignalRService } from '../../../shared/services/auth/signalr.service';
   templateUrl: './header-start.component.html',
   styleUrls: ['./header-start.component.less']
 })
-export class HeaderStartComponent implements OnInit, OnDestroy {
+export class HeaderStartComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dropdownList') dropdownList: ElementRef;
   dropdownToggle = false;
   dropdownSubscription: Subscription;
@@ -48,17 +48,22 @@ export class HeaderStartComponent implements OnInit, OnDestroy {
     });
     const isSignalR = JSON.parse(sessionStorage.getItem('signalR'));
     this.signalReload = isSignalR === null ? true : isSignalR;
+  }
 
+  ngAfterViewInit() {
+    this.signalRService.signalrConnection$.subscribe(connect => {
+
+    });
     this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
       this.getBarData();
     });
     this.eventSubscritption = this.signalRService.onEventSent$.subscribe(resp => {
+      console.log('!!!!!!!!!!!!!!!!!!!!');
       this.getBarData();
     });
     this.eventViewedSubscritption = this.signalRService.eventViewed$.subscribe(resp => {
       this.getBarData();
     });
-
   }
 
   getBarData() {

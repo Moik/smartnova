@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -28,7 +28,7 @@ import { GetProductIngredientsService } from '../../../../shared/services/termin
   styleUrls: ['./products.component.less']
 })
 
-export class ProductsComponent implements OnInit, OnDestroy {
+export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit {
   public data: TItemProducts[] = [];
   public filterQuery = '';
   public rowsOnPage = 10;
@@ -111,12 +111,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
 
     this.page = this.settingsService.settings.products.page;
+  }
 
-    this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
-      this.getProducts(resp);
-    });
-    this.configSubscription = this.signalRService.onConfigSent$.subscribe(resp => {
-      this.getProducts(resp);
+  ngAfterViewInit() {
+    this.signalRService.signalrConnection$.subscribe(connect => {
+      this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
+        this.getProducts(resp);
+      });
+      this.configSubscription = this.signalRService.onConfigSent$.subscribe(resp => {
+        this.getProducts(resp);
+      });
     });
   }
 

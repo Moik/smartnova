@@ -56,13 +56,14 @@ export class MainChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.renderCharts();
-
-    this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
-      this.renderCharts();
-    });
   }
 
   public ngAfterViewInit() {
+    this.signalRService.signalrConnection$.subscribe(connect => {
+      this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
+        this.renderCharts();
+      });
+    });
   }
 
   public ngOnDestroy() {

@@ -40,9 +40,9 @@ const startRoutes: Routes = [
     {
       path: 'start',
       component: StartComponent,
-      resolve: {
-        connection: SignalRResolver
-      },
+      // resolve: {
+      //   connection: SignalRResolver
+      // },
       children: [
         {
           path: '',

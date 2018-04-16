@@ -1,9 +1,11 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { urlApi } from '../../url.api';
+import { ISignalRConnection, BroadcastEventListener } from 'ng2-signalr';
 
 @Injectable()
 export class SignalRService {
@@ -12,15 +14,19 @@ export class SignalRService {
     });
     isDemoMode = false;
 
+    connectInit = {} as ISignalRConnection;
+    signalrConnection = new BehaviorSubject<ISignalRConnection>(this.connectInit);
+    signalrConnection$ = this.signalrConnection.asObservable();
+
     private signalRToggleSource = new Subject<boolean>();
     signalRToggle$ = this.signalRToggleSource.asObservable();
 
     private eventViewedSource = new Subject<boolean>();
     eventViewed$ = this.eventViewedSource.asObservable();
 
-    onSaleSent$: Observable<any>;
-    onEventSent$: Observable<any>;
-    onConfigSent$: Observable<any>;
+    onSaleSent$ = new BroadcastEventListener<any>('salemessage');
+    onEventSent$ = new BroadcastEventListener<any>('eventmessage');
+    onConfigSent$ = new BroadcastEventListener<any>('configmessage');
     constructor(private http: Http) {}
 
     startDemo(userId: string): Observable<any> {
@@ -53,5 +59,12 @@ export class SignalRService {
 
     eventWasViewed() {
         this.eventViewedSource.next();
+    }
+
+    getConnection(connection: ISignalRConnection) {
+        this.signalrConnection.next(connection);
+        this.onSaleSent$ = connection.listenFor('salemessage');
+        this.onEventSent$ = connection.listenFor('eventmessage');
+        this.onConfigSent$ = connection.listenFor('configmessage');
     }
 }

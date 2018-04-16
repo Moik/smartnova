@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 import { slideInDownAnimation, urlApi } from '../shared';
 import { StartModule } from './start.module';
-import { ISignalRConnection, ConnectionStatus } from 'ng2-signalr';
+import { ISignalRConnection, ConnectionStatus, SignalR } from 'ng2-signalr';
 
 import { SignalRService } from '../shared/services/auth/signalr.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -30,38 +30,41 @@ export class StartComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private signalRService: SignalRService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private signalR: SignalR
   ) { }
 
   ngOnInit() {
-    this.connection = this.route.snapshot.data['connection'];
-    this.signalRService.onSaleSent$ = this.connection.listenFor('salemessage');
-    this.signalRService.onEventSent$ = this.connection.listenFor('eventmessage');
-    this.signalRService.onConfigSent$ = this.connection.listenFor('configmessage');
-    this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
-      this.snackBarShow(JSON.parse(<string>resp).Notification);
-    });
-    this.eventSubscritption = this.signalRService.onEventSent$.subscribe(resp => {
-      this.snackBarShow(JSON.parse(<string>resp).Notification);
-    });
-    this.configSubscritption = this.signalRService.onConfigSent$.subscribe(resp => {
-      this.snackBarShow(JSON.parse(<string>resp).Notification);
-    });
+    // this.connection = this.route.snapshot.data['connection'];
+    this.signalR.connect().then(connect => {
+      this.connection = connect;
+      this.signalRService.getConnection(connect);
 
-    this.userId = sessionStorage.getItem('UserPk');
-    this.groupId = sessionStorage.getItem('TnId');
-    if (!this.userId) {
-        this.userId = this.signalRService.getUserDemoId();
-        this.groupId = this.signalRService.getGroupDemoId();
-    }
+      this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
+        this.snackBarShow(JSON.parse(<string>resp).Notification);
+      });
+      this.eventSubscritption = this.signalRService.onEventSent$.subscribe(resp => {
+        this.snackBarShow(JSON.parse(<string>resp).Notification);
+      });
+      this.configSubscritption = this.signalRService.onConfigSent$.subscribe(resp => {
+        this.snackBarShow(JSON.parse(<string>resp).Notification);
+      });
 
-    const isSignalROn = JSON.parse(sessionStorage.getItem('signalR'));
-    if (isSignalROn || isSignalROn === null) {
-      this.connect(this.userId, this.groupId, true);
-    }
+      this.userId = sessionStorage.getItem('UserPk');
+      this.groupId = sessionStorage.getItem('TnId');
+      if (!this.userId) {
+          this.userId = this.signalRService.getUserDemoId();
+          this.groupId = this.signalRService.getGroupDemoId();
+      }
 
-    this.signalrSubscritption = this.signalRService.signalRToggle$.subscribe((status: boolean) => {
-      this.connect(this.userId, this.groupId, status);
+      const isSignalROn = JSON.parse(sessionStorage.getItem('signalR'));
+      if (isSignalROn || isSignalROn === null) {
+        this.connect(this.userId, this.groupId, true);
+      }
+
+      this.signalrSubscritption = this.signalRService.signalRToggle$.subscribe((status: boolean) => {
+        this.connect(this.userId, this.groupId, status);
+      });
     });
   }
 
