@@ -9,7 +9,6 @@ import {
   ElementRef,
   Output,
   EventEmitter,
- 
 } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 
@@ -42,7 +41,7 @@ export class IngredientsConfiguratorComponent implements OnInit, OnChanges {
   @Input() currentIngredient: any;
   @Output() configSent = new EventEmitter();
 
-  public directive:any='';
+  public directive: any= '';
 
   public stateConfig = 'inactive';
   public ingredientConfig: string;
@@ -109,7 +108,9 @@ export class IngredientsConfiguratorComponent implements OnInit, OnChanges {
  /*
   ChangeNewThreshold(ev:any):void{
     console.log(this.form)
-    if(this.ingredientUpdate.NewThreshold==null || this.ingredientUpdate.NewThreshold=='' ||this.ingredientUpdate.NewThreshold=='0') {this.ingredientUpdate.NewThreshold='0'}
+    if(this.ingredientUpdate.NewThreshold==null
+      || this.ingredientUpdate.NewThreshold==''
+      ||this.ingredientUpdate.NewThreshold=='0') {this.ingredientUpdate.NewThreshold='0'}
     let str=this.ingredientUpdate.NewThreshold;
     let result = '';
     let separatorExist = false;
@@ -127,7 +128,7 @@ export class IngredientsConfiguratorComponent implements OnInit, OnChanges {
     });
     console.log(result);
     this.ingredientUpdate.NewThreshold=result;
- 
+
 
   }
 */
@@ -144,8 +145,10 @@ export class IngredientsConfiguratorComponent implements OnInit, OnChanges {
   }
 
   submitConfig() {
-    const issuanceVol = this.form.value.NewIssuanceVol || this.ingredientUpdate.PreviousIssuanceVol;
-    const threshold = this.form.value.NewThreshold || this.ingredientUpdate.PreviousThreshold;
+    const issuanceVol = this.checkDataFromField(this.form.value.NewIssuanceVol , this.ingredientUpdate.IssuanceVol);
+    const threshold = this.checkDataFromField(this.form.value.NewThreshold , this.ingredientUpdate.Threshold);
+    console.log(issuanceVol);
+    console.log(threshold);
     if (issuanceVol && threshold) {
       const setData = {
         IssuanceVol: issuanceVol,
@@ -192,6 +195,12 @@ export class IngredientsConfiguratorComponent implements OnInit, OnChanges {
       horizontalPosition: 'right'
     });
   }
+
+  checkDataFromField(news: any, old: any) {
+      if (news === '' || news === undefined) {return old;  }
+        return news;
+  }
+
 
 }
 

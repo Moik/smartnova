@@ -28,6 +28,7 @@ export class StartComponent implements OnInit, OnDestroy {
   @HostBinding('@routeAnimation') routeAnimation = true;
 
   constructor(
+    private Route:Router,
     private route: ActivatedRoute,
     private signalRService: SignalRService,
     public snackBar: MatSnackBar,
@@ -55,7 +56,13 @@ export class StartComponent implements OnInit, OnDestroy {
 
     this.userId = sessionStorage.getItem('UserPk');
     this.groupId = sessionStorage.getItem('TnId');
+    
+     if(sessionStorage.getItem('Demo') != 'true'){
+      this.Route.navigate(['/']);
+     }
+
     if (!this.userId) {
+  
         this.userId = this.signalRService.getUserDemoId();
         this.groupId = this.signalRService.getGroupDemoId();
     }

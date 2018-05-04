@@ -14,7 +14,7 @@
                         <div class="row text-center">
                             <div class="col-sm-4 label-sm">
                                 <label>Ввести новое</label>
-                                <input id="NewIssuanceVol" name="NewIssuanceVol" type="text" class="form-control input-sm" [(ngModel)]="ingredientUpdate.NewIssuanceVol"  appForbidNegativeNumberForConf placeholder="0" min="1" required >
+                                <input id="NewIssuanceVol" name="NewIssuanceVol" type="text" class="form-control input-sm" [(ngModel)]="ingredientUpdate.NewIssuanceVol"  appForbidNegativeNumberForConf placeholder="0" min="0" required >
                             </div>
                             <div class="col-sm-4 label-sm">
                                 <label>Текущий ввод</label>
@@ -36,7 +36,7 @@
                         <div class="row text-center">
                             <div class="col-sm-4 label-sm">
                                 <label>Ввести новое</label>
-                                <input id="NewThreshold" name="NewThreshold" type="text" class="form-control input-sm" [(ngModel)]="ingredientUpdate.NewThreshold" appForbidNegativeNumberForConf placeholder="0" min="1" required>
+                                <input id="NewThreshold" name="NewThreshold" type="text" class="form-control input-sm" [(ngModel)]="ingredientUpdate.NewThreshold" appForbidNegativeNumberForConf placeholder="0" min="0" required>
                             </div>
                             <div class="col-sm-4 label-sm">
                                 <label>Текущий ввод</label>
@@ -57,10 +57,10 @@
                         <button type="button" class="btn btn-danger" (click)='ConfigState($event)' #cancelBtn>Отмена</button>
                     </div>
                     <div class="col-sm-6">
-                        <button type="button" id="" name="" class="btn btn-default" (click)='applyConfig()' [disabled]="!form.valid">Я согласен с настройками</button>
+                        <button type="button" id="" name="" class="btn btn-default" (click)='applyConfig()' [disabled]="(form.value.NewIssuanceVol !='' &&  form.value.NewIssuanceVol != undefined ) || (form.value.NewThreshold !='' && form.value.NewThreshold != undefined ) ? false : true ">Я согласен с настройками</button>
                     </div>
                     <div class="col-sm-3">
-                        <button type="submit" id="" name="" class="btn btn-success" [disabled]="!form.valid">Применить</button>
+                        <button type="submit" id="" name="" class="btn btn-success" [disabled]="(form.value.NewIssuanceVol !='' &&  form.value.NewIssuanceVol != undefined ) || (form.value.NewThreshold !='' && form.value.NewThreshold != undefined ) ? false : true ">Применить</button>
                     </div>
                 </div>
             </fieldset>

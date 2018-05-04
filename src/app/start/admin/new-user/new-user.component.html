@@ -12,30 +12,30 @@
                                 <div class="col-sm-12 label-sm">
                                     <div class="row text-center">
                                         <div class="col-sm-1">
-                                            <label for="id"> ID</label>
+                                            <div class='labels' for="id"> ID</div>
                                             <input name="id" class="form-control input-sm" formControlName="Pk">
                                           
                                         </div>
                                         <div class="col-sm-2">
-                                            <label for="name">Ф.И.О</label>
+                                            <div class='labels' for="name">Ф.И.О</div>
                                             <input name="name" type="text" class="form-control input-sm" formControlName="Name">
                                            
                                         </div>
                                         <div class="col-sm-2">
-                                            <label for="role"> Роль</label>
+                                            <div class='labels' for="role"> Роль</div>
                                             <select name="role" class="form-control input-sm"    placeholder="No city selected" formControlName="Role">                                    
                                                 <option *ngFor="let op of options" [ngValue]="op">{{op.Name}}</option>
                                             </select>
                                             
                                         </div>
                                         <div class="col-sm-2">
-                                            <label for="login"> Логин</label>
+                                            <div class='labels' for="login"> Логин</div>
                                             
                                                 <input name="login" type="text" class="form-control input-sm" formControlName="Email">
                                        
                                             </div>
                                         <div class="col-sm-2">
-                                            <label for="password">Пароль</label>
+                                            <div class='labels' for="password">Пароль</div>
                                             <input name="password" type="text" class="form-control input-sm" formControlName="Password">
                                             
                                         </div>
@@ -45,11 +45,11 @@
                                         
  
                                         <div class="col-sm-12" style="margin-top:15px">
-                                                <div class="alert alert-danger" *ngIf="adminForm.get('Pk').touched &&  adminForm.get('Pk').invalid">Поле ID обязательно для заполнения</div> 
-                                                <div class="alert alert-danger" *ngIf="adminForm.get('Name').touched &&  adminForm.get('Name').invalid">Поле ФИО обязательно для заполнения</div>
-                                                <div class="alert alert-danger" *ngIf="adminForm.get('Role').touched &&  adminForm.get('Role').invalid">Укажите Роль</div> 
-                                                <div class="alert alert-danger" *ngIf="adminForm.get('Email').touched &&  adminForm.get('Email').invalid">Неверный Логин формат"example@gmail.com"</div>
-                                                <div class="alert alert-danger" *ngIf="adminForm.get('Password').touched &&  adminForm.get('Password').invalid">Пароль не менее 6 символов</div> 
+                                                <div class="alert alert-dangers" *ngIf="adminForm.get('Pk').touched &&  adminForm.get('Pk').invalid">Поле ID обязательно для заполнения</div> 
+                                                <div class="alert alert-dangers" *ngIf="adminForm.get('Name').touched &&  adminForm.get('Name').invalid">Поле ФИО обязательно для заполнения</div>
+                                                <div class="alert alert-dangers" *ngIf="adminForm.get('Role').touched &&  adminForm.get('Role').invalid">Укажите Роль</div> 
+                                                <div class="alert alert-dangers" *ngIf="adminForm.get('Email').touched &&  adminForm.get('Email').invalid">Неверный Логин формат"example@gmail.com"</div>
+                                                <div class="alert alert-dangers" *ngIf="adminForm.get('Password').touched &&  adminForm.get('Password').invalid">Пароль не менее 6 символов</div> 
                                             </div>
 
                                     </div>

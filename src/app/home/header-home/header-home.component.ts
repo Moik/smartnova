@@ -31,6 +31,8 @@ export class HeaderHomeComponent implements OnInit {
       });
     } else {
       this.router.navigate(['/start']);
+      sessionStorage.setItem('Demo','true');
+
     }
   }
 }
