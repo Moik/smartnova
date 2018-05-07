@@ -83,6 +83,7 @@ export class SideBarHomeComponent implements OnInit, OnDestroy {
     this.loads = true;
     this.authService.login(value).subscribe((res) => {
       if (res.IsSuccess) {
+        sessionStorage.setItem('Demo','true');
         this.router.navigate(['/start']);
       } else {
         this.errorFromServer = res.Message;

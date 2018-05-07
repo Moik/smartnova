@@ -27,6 +27,7 @@ export class HeaderHomeComponent implements OnInit {
     if (this.auth.isLoggedIn.getValue()) {
       this.auth.logout().subscribe(resp => {
         this.router.navigate(['/start']);
+        sessionStorage.setItem('Demo','true');
         this.terminalService.terminals.next([]);
       });
     } else {
