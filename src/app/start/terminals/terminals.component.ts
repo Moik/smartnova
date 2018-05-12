@@ -10,6 +10,8 @@ import {
 } from '../../shared';
 import { SettingsService } from '../../shared/services/common/settings.service';
 import { SignalRService } from '../../shared/services/auth/signalr.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Terminal } from './../../shared/models/terminal.model';
 
 @Component({
   selector: 'app-terminals',
@@ -26,7 +28,7 @@ export class TerminalsComponent implements OnInit, OnDestroy {
 
   public data: StorageTerminalsData;
   public state: string;
-
+  private changeTerminalSubscription:Subscription;
   multiFilter: any;
   filtered: boolean;
   page: number;
@@ -44,6 +46,7 @@ export class TerminalsComponent implements OnInit, OnDestroy {
     private StateMultifilter: StateMultifilterService,
     private settingsService: SettingsService,
     private signalRService: SignalRService
+
   ) { }
 
 
@@ -73,6 +76,12 @@ export class TerminalsComponent implements OnInit, OnDestroy {
 
     this.page = this.settingsService.settings.terminals.page;
     this.rowsOnPage = this.settingsService.settings.terminals.rowsOnPage;
+
+    this.changeTerminalSubscription = this.getTerminalsService.changeTerminal$.subscribe(res=>{
+      if(res){
+       this.changeItem(res);
+      }
+    })
   }
 
   setRowsOnPage() {
@@ -116,9 +125,25 @@ export class TerminalsComponent implements OnInit, OnDestroy {
   onChangeSortOrder(sortOrder: string) {
     this.settingsService.settings.terminals.sortOrder = sortOrder;
   }
+  changeItem(value:string){
+    let oldTerm=this.getTerminalsService.terminals.getValue();
+      if (oldTerm.length != 0) {
+        let newTerm=oldTerm.map(function(val,i){
+        if(val.Pk===value){
+          val.Connection=true;
+          return val;
+        }else{
+          return val;
+        }
+      })
+      this.getTerminalsService.terminals.next(newTerm);
+    
+    }
+   
+  }
 
   ngOnDestroy(): void {
-
+    this.changeTerminalSubscription.unsubscribe();
   }
 }
 

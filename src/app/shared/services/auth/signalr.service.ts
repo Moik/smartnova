@@ -21,6 +21,7 @@ export class SignalRService {
     onSaleSent$: Observable<any>;
     onEventSent$: Observable<any>;
     onConfigSent$: Observable<any>;
+    incasoSent$:Observable<any>;
     constructor(private http: Http) {}
 
     startDemo(userId: string): Observable<any> {

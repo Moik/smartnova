@@ -23,6 +23,8 @@ export class StartComponent implements OnInit, OnDestroy {
   private saleSubscritption: Subscription;
   private eventSubscritption: Subscription;
   private configSubscritption: Subscription;
+  private incasoSubscription:Subscription;
+  
   userId: string;
   groupId: string;
   @HostBinding('@routeAnimation') routeAnimation = true;
@@ -41,18 +43,27 @@ export class StartComponent implements OnInit, OnDestroy {
     this.signalRService.onSaleSent$ = this.connection.listenFor('salemessage');
     this.signalRService.onEventSent$ = this.connection.listenFor('eventmessage');
     this.signalRService.onConfigSent$ = this.connection.listenFor('configmessage');
+    this.signalRService.incasoSent$ =this.connection.listenFor('incasomessage');
     this.saleSubscritption = this.signalRService.onSaleSent$.subscribe(resp => {
       this.snackBarShow(JSON.parse(<string>resp).Notification);
       this.terminalService.getTerminals$();
       this.getChartMainService.getChartMain$();
+      this.terminalService.change(JSON.parse(<string>resp).TerminalPk);
     });
     this.eventSubscritption = this.signalRService.onEventSent$.subscribe(resp => {
       this.snackBarShow(JSON.parse(<string>resp).Notification);
       this.terminalService.getTerminals$();
+      this.terminalService.change(JSON.parse(<string>resp).TerminalPk);
     });
     this.configSubscritption = this.signalRService.onConfigSent$.subscribe(resp => {
       this.snackBarShow(JSON.parse(<string>resp).Notification);
+      this.terminalService.change(JSON.parse(<string>resp).TerminalPk);
     });
+    this.incasoSubscription=this.signalRService.incasoSent$.subscribe(resp =>{
+      this.snackBarShow(JSON.parse(<string>resp).Notification);
+      this.terminalService.getTerminals$();
+      this.getChartMainService.getChartMain$()
+    })
 
     this.userId = sessionStorage.getItem('UserPk');
     this.groupId = sessionStorage.getItem('TnId');
@@ -121,6 +132,9 @@ export class StartComponent implements OnInit, OnDestroy {
     }
     if (this.configSubscritption) {
       this.configSubscritption.unsubscribe();
+    }
+    if( this.incasoSubscription){
+      this.incasoSubscription.unsubscribe();
     }
     // this.connect(this.userId, this.groupId, false);
     this.connection.invoke('disconnect', this.userId).then(data => {

@@ -69,6 +69,7 @@ export class MainChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.saleSubscritption = this.getChartMainService.charts$.subscribe(data => {
       this.dataMain = data;
+      console.log(data);
       this.renderCharts();
     });
   }

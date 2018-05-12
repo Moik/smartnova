@@ -12,7 +12,8 @@ import { AuthService } from '../../services/auth/auth.service';
 
 @Injectable()
 export class GetTerminalsService {
-
+  changeTerminal= new BehaviorSubject<any>(null);
+  changeTerminal$=this.changeTerminal.asObservable();
   terminals = new BehaviorSubject<Terminal[]>([]);
   terminals$ = this.terminals.asObservable();
   private baseUrl: string;
@@ -52,5 +53,8 @@ export class GetTerminalsService {
           this.terminals.next(data.Terminals);
         }
       });
+  }
+  change(val){
+    this.changeTerminal.next(val);
   }
 }
