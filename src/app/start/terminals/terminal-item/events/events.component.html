@@ -233,7 +233,7 @@
                                         <mfDefaultSorter by="Viewed">Просмотрено</mfDefaultSorter>
                                     </th>
                                     <th>Динамика</th>
-                                    <th *ngIf="stateConfigMode == 'active'">Конфигурирование</th>
+                                    <!-- <th *ngIf="stateConfigMode == 'active'">Конфигурирование</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,9 +248,9 @@
                                     <td>
                                         <a href="#ViewEventStatistic" class="icon-statistic" (click)="goToEventStatistic($event, item.Type, item.Pk )"></a>
                                     </td>
-                                    <td class="text-center" *ngIf="stateConfigMode == 'active'">
+                                    <!-- <td class="text-center" *ngIf="stateConfigMode == 'active'">
                                         <a class="icon-config" (click)="ConfigState($event, item.Pk)"></a>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>

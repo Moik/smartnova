@@ -12,11 +12,11 @@
     <ul class="data-list">
       <li class="data-color1">
         <span class="data-desc">Сумма продаж</span>
-        <span class="number" *ngIf='bardata'>{{bardata.BarData.Sales}}</span>
+        <span class="number" *ngIf='bardata'>{{bardata?.BarData.Sales}}</span>
       </li>
       <li class="data-color1">
         <span class="data-desc">Сумма инкассации</span>
-        <span class="number" *ngIf='bardata'>{{bardata.BarData.Incaso}}</span>
+        <span class="number" *ngIf='bardata'>{{bardata?.BarData.Incaso}}</span>
       </li>
     </ul>
     <a (click)="signalReloadToggle()" [ngSwitch]="signalReload" [ngClass]="{'connect': signalReload === true }" class="reload-data-link tooltip-wrap">
@@ -26,11 +26,11 @@
     <ul class="data-list">
       <li class="data-color2">
         <span class="data-desc">Всего событий ТО</span>
-        <span class="number" *ngIf='bardata'>{{bardata.BarData.Events}}</span>
+        <span class="number" *ngIf='bardata'>{{bardata?.BarData.Events}}</span>
       </li>
       <li class="data-color3">
         <span class="data-desc">Всего<br>аварий</span>
-        <span class="number" *ngIf='bardata'>{{bardata.BarData.Alarms}}</span></li>
+        <span class="number" *ngIf='bardata'>{{bardata?.BarData.Alarms}}</span></li>
     </ul>
     <a href="#" class="user-interface tooltip-wrap" (click)="dropdownMenu($event)">
       <span class="tooltiptext">Личные данные</span>
